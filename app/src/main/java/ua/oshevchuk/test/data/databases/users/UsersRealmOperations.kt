@@ -13,7 +13,7 @@ import java.nio.channels.AsynchronousSocketChannel.open
 /**
  * @author shevsan on 29.07.2022
  */
-class UsersRealmOperations {
+open class UsersRealmOperations {
     private val config = RealmConfiguration.Builder(schema = setOf(UserRO::class)).build()
     private val realm = Realm.open(config)
 
@@ -51,24 +51,24 @@ class UsersRealmOperations {
     }
 
 
-//    fun retrieveUsers(): UserModel {
-//        val users = ArrayList<UserModel>()
-//        val tasks: RealmResults<UserRO> = realm.query<UserRO>().find()
-//        val temp = ArrayList<UserModel>()
-//        tasks.forEach { user ->
-//            temp.add(
-//                UserModel(
-//                    login = user.userName,
-//                    avatar_url = user.imageURL,
-//                    id = user.id.toInt(),
-//                    changesCount = user.changesCount
-//                )
-//            )
-//        }
-//        for (i in 0 until list.size) {
-//            userModel.add(list[i])
-//        }
-//        return userModel
-//    }
+    fun getUsers(): ArrayList<UserModel> {
+        val users = arrayListOf<UserModel>()
+        val tasks: RealmResults<UserRO> = realm.query<UserRO>().find()
+        val temp = ArrayList<UserModel>()
+        tasks.forEach { user ->
+            temp.add(
+                UserModel(
+                    login = user.userName,
+                    avatar_url = user.imageURL,
+                    id = user.id.toInt(),
+                    changesCounter = user.changesCounter
+                )
+            )
+        }
+        temp.forEach{
+            users.add(it)
+        }
+        return users
+    }
 
 }

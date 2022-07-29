@@ -7,7 +7,7 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 /**
  * @author shevsan on 29.07.2022
  */
-open class UserRO : RealmObject {
+class UserRO : RealmObject {
     @PrimaryKey
     var id: String = ""
     var userName: String = ""

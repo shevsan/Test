@@ -23,10 +23,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel.getUsersFromDB()
+        viewModel.getUserList()
         initViewModel()
-
-
-
     }
 
     private fun initAdapter() {
@@ -45,7 +44,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun initViewModel() {
-
         viewModel.getUsers().observe(viewLifecycleOwner){
             adapter.setData(it)
         }

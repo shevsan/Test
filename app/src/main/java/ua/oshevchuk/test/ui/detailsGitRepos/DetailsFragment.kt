@@ -26,6 +26,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         currentUser = arguments?.getSerializable("key") as UserModel
         binding.userName.text = currentUser.login
         viewModel = ViewModelProvider(this)[DetailsViewModel::class.java]
+        viewModel.getReposFromDB(currentUser.login)
         viewModel.getReposFromApi(currentUser.login)
         adapter = DetailsRecyclerAdapter()
         viewModel.getRepos().observe(viewLifecycleOwner){

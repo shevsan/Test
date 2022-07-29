@@ -8,9 +8,9 @@ import io.realm.kotlin.types.annotations.PrimaryKey
  */
 open class RepoRO: RealmObject{
     @PrimaryKey
-    val name: String= ""
-    val html_url: String = ""
-    val language: String?= ""
-    val stargazers_count: Int= 0
-    val username: String= ""
+    var html_url: String = ""
+    var name: String= ""
+    var language: String?= ""
+    var stargazers_count: Int= 0
+    var username: String= ""
 }
