@@ -10,6 +10,7 @@ import ua.oshevchuk.test.R
 import ua.oshevchuk.test.adapters.main.MainRecyclerAdapter
 import ua.oshevchuk.test.core.BaseFragment
 import ua.oshevchuk.test.databinding.FragmentMainBinding
+import ua.oshevchuk.test.models.users.UserModel
 
 /**
  * @author shevsan on 28.07.2022
@@ -29,14 +30,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun initAdapter() {
-        adapter = MainRecyclerAdapter()
+        adapter = MainRecyclerAdapter(){
+            onItemClicked(it)
+        }
         binding.mainRecycler.adapter = adapter
 
     }
 
-    private fun onItemClicked() {
+    private fun onItemClicked(user:UserModel) {
+        val bundle= Bundle()
+        bundle.putSerializable("key",user)
         requireActivity().findNavController(R.id.fragmentContainerView)
-            .navigate(R.id.action_mainFragment_to_detailsFragment)
+            .navigate(R.id.action_mainFragment_to_detailsFragment,bundle)
     }
 
     private fun initViewModel() {

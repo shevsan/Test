@@ -12,7 +12,7 @@ import ua.oshevchuk.test.models.users.UserModel
 /**
  * @author shevsan on 28.07.2022
  */
-class MainRecyclerAdapter() :
+class MainRecyclerAdapter(private val clickListener: (UserModel) -> Unit) :
     RecyclerView.Adapter<MainRecyclerAdapter.MainViewHolder>() {
     class MainViewHolder(val binding: UserItemBinding, val clickAtPosition: (Int) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
@@ -25,13 +25,13 @@ class MainRecyclerAdapter() :
 
 
 
-    var users  = ArrayList<UserModel>()
+   private var users  = ArrayList<UserModel>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val vb = UserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MainViewHolder(vb) {
-
+            clickListener(users[it])
         }
     }
 
