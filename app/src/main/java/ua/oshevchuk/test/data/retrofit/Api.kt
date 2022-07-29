@@ -13,6 +13,6 @@ import ua.oshevchuk.test.models.users.UserModel
 interface Api {
     @GET("./users")
     suspend fun getUsersList(): Response<List<UserModel>>
-    @GET("users/{username}/repos")
-    fun getUsersRepos(@Path("username") username: String): Response<List<RepositoryModel>>
+    @GET("/users/{username}/repos")
+    suspend fun getUsersRepos(@Path("username") username: String): Response<List<RepositoryModel>>
 }

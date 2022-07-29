@@ -23,5 +23,6 @@ data class UserModel(
     val starred_url: String,
     val subscriptions_url: String,
     val type: String,
-    val url: String
+    val url: String,
+    val changesCounter:Int=0
 ):Serializable

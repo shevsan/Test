@@ -32,5 +32,6 @@ class DetailsRecyclerAdapter: RecyclerView.Adapter<DetailsRecyclerAdapter.Detail
     }
     fun setData(list:List<RepositoryModel>){
         repos = list as ArrayList<RepositoryModel>
+        this.notifyDataSetChanged()
     }
 }
