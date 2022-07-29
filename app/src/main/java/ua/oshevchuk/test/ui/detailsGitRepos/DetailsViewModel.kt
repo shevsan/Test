@@ -37,11 +37,12 @@ class DetailsViewModel @Inject constructor(private val api: Api) : ViewModel() {
                         )
                     }
                 }
+                getReposFromDB(name)
 
             }.onFailure {
                 getReposFromDB(name)
             }
-            getReposFromDB(name)
+
         }
     }
     fun getReposFromDB(username: String) {

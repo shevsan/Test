@@ -26,12 +26,26 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         currentUser = arguments?.getSerializable("key") as UserModel
         binding.userName.text = currentUser.login
         viewModel = ViewModelProvider(this)[DetailsViewModel::class.java]
-        viewModel.getReposFromDB(currentUser.login)
-        viewModel.getReposFromApi(currentUser.login)
-        adapter = DetailsRecyclerAdapter()
+        initViewModel()
+        initAdapter()
+        binding.backButton.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+    }
+    private fun initViewModel(){
+        try{
+            viewModel.getReposFromApi(currentUser.login)
+            viewModel.getReposFromDB(currentUser.login)
+        }catch (e:Exception){
+            return
+        }
+
         viewModel.getRepos().observe(viewLifecycleOwner){
             adapter.setData(it)
         }
+    }
+    private fun initAdapter(){
+        adapter = DetailsRecyclerAdapter()
         binding.repoRecycler.adapter = adapter
     }
 }
