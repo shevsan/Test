@@ -1,4 +1,4 @@
-package ua.oshevchuk.test.core
+package ua.oshevchuk.test.core.baseFragment
 
 /**
  * @author shevsan on 28.07.2022

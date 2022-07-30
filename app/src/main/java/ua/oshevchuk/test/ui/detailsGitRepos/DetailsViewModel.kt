@@ -20,35 +20,36 @@ class DetailsViewModel @Inject constructor(private val api: Api) : ViewModel() {
     private val repoOperations = RepoRealmOperations()
     private var reposRealm = ArrayList<RepositoryModel>()
 
-    fun getReposFromApi(name: String) {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                val result = api.getUsersRepos(name)
-                val temp = result.body()
-                repos.value = temp
-                temp?.let {
-                    for (i in it.indices) {
-                        repoOperations.updateOrCreateRepo(
-                            repoTitle = it[i].name,
-                            lang = it[i].language,
-                            starring = it[i].stargazers_count,
-                            url = it[i].html_url,
-                            username = name
-                        )
-                    }
-                }
-
-
-            }.onFailure {
-                getReposFromDB(name)
+    suspend fun getReposFromApi(name: String) {
+        val result = api.getUsersRepos(name)
+        val temp = result.body()
+        repos.value = temp
+        temp?.let {
+            for (i in it.indices) {
+                repoOperations.updateOrCreateRepo(
+                    repoTitle = it[i].name,
+                    lang = it[i].language,
+                    starring = it[i].stargazers_count,
+                    url = it[i].html_url,
+                    username = name
+                )
             }
+
             getReposFromDB(name)
+
         }
+
+
     }
+
     fun getReposFromDB(username: String) {
         reposRealm = repoOperations.getRepos(username)
-        repos.postValue(reposRealm)
+        if(reposRealm.size!=0)
+            repos.postValue(reposRealm)
+
+
     }
+
     fun getRepos(): LiveData<List<RepositoryModel>> {
         return repos
     }

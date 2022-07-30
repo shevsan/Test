@@ -9,9 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 import ua.oshevchuk.test.R
 import ua.oshevchuk.test.adapters.details.DetailsRecyclerAdapter
-import ua.oshevchuk.test.core.BaseFragment
+import ua.oshevchuk.test.core.baseFragment.BaseFragment
 import ua.oshevchuk.test.databinding.FragmentDetailsBinding
 import ua.oshevchuk.test.models.users.UserModel
 import ua.oshevchuk.test.utils.bundleKey
@@ -36,24 +37,27 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         }
     }
 
-    private fun initViewModel()
-    {
-        try {
+    private fun initViewModel() {
 
-            viewModel.getReposFromApi(currentUser.login)
-            viewModel.getReposFromDB(currentUser.login)
-        } catch (e: Exception) {
-            return
+        MainScope().launch {
+            kotlin.runCatching {
+                viewModel.getReposFromDB(currentUser.login)
+                viewModel.getReposFromApi(currentUser.login)
+
+
+
+            }
         }
+
+
 
         viewModel.getRepos().observe(viewLifecycleOwner) {
             adapter.setData(it)
         }
     }
 
-    private fun initAdapter()
-    {
-        adapter = DetailsRecyclerAdapter{
+    private fun initAdapter() {
+        adapter = DetailsRecyclerAdapter {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.html_url))
             startActivity(intent)
 

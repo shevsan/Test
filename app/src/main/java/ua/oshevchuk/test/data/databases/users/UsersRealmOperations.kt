@@ -11,8 +11,8 @@ import ua.oshevchuk.test.models.users.UserRO
  * @author shevsan on 29.07.2022
  */
 open class UsersRealmOperations {
-    private val config = RealmConfiguration.Builder(schema = setOf(UserRO::class)).build()
-    private val realm = Realm.open(config)
+    private val cfg = RealmConfiguration.Builder(schema = setOf(UserRO::class)).build()
+    private val realm = Realm.open(cfg)
 
     suspend fun createUser(login: String, image: String, id: String
     )

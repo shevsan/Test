@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ua.oshevchuk.test.R
 import ua.oshevchuk.test.adapters.main.MainRecyclerAdapter
-import ua.oshevchuk.test.core.BaseFragment
+import ua.oshevchuk.test.core.baseFragment.BaseFragment
 import ua.oshevchuk.test.databinding.FragmentMainBinding
 import ua.oshevchuk.test.models.users.UserModel
 import ua.oshevchuk.test.utils.bundleKey

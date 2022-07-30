@@ -2,8 +2,6 @@ package ua.oshevchuk.test.adapters.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ua.oshevchuk.test.databinding.UserItemBinding

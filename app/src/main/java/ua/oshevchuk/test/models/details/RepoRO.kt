@@ -6,7 +6,7 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 /**
  * @author shevsan on 29.07.2022
  */
-class RepoRO: RealmObject
+open class RepoRO: RealmObject
 {
     @PrimaryKey
     var html_url: String = ""

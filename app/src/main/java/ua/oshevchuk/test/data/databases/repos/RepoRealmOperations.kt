@@ -1,5 +1,6 @@
 package ua.oshevchuk.test.data.databases.repos
 
+import android.util.Log
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
@@ -17,7 +18,7 @@ open class RepoRealmOperations {
     suspend fun updateOrCreateRepo(repoTitle: String, lang: String?, starring: Int, url: String, username: String)
     {
         realm.write {
-            val user: RepoRO? = query<RepoRO>("url == $0", url).first().find()
+            val user: RepoRO? = query<RepoRO>("html_url == $0", url).first().find()
             if (user != null)
             {
                 user.name = repoTitle
@@ -39,8 +40,8 @@ open class RepoRealmOperations {
 
     fun getRepos(login: String): ArrayList<RepositoryModel>
     {
-        val repoArray = ArrayList<RepositoryModel>()
         val tasks: RealmResults<RepoRO> = realm.query<RepoRO>("username == $0", login).find()
+        Log.d("mytag",tasks.toString())
         val temp = ArrayList<RepositoryModel>()
         tasks.forEach { repo ->
             temp.add(
@@ -53,10 +54,8 @@ open class RepoRealmOperations {
                 )
             )
         }
-        temp.forEach {
-            repoArray.add(it)
-        }
 
-        return repoArray
+
+        return temp
     }
 }

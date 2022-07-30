@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ua.oshevchuk.test.databinding.RepositoriesItemBinding
 import ua.oshevchuk.test.models.details.RepositoryModel
-import ua.oshevchuk.test.models.users.UserModel
 
 /**
  * @author shevsan on 29.07.2022

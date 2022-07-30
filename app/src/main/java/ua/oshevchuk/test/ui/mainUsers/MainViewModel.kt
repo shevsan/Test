@@ -34,6 +34,7 @@ class MainViewModel @Inject constructor(private val api: Api) : ViewModel() {
                 val result = api.getUsersList()
                 val temp  = result.body()
                 users.value =temp
+                if((temp?.size ?: 0) != 0){
                 temp?.let {
                     for (i in it.indices) {
                         realmOperations.createUser(
@@ -42,7 +43,7 @@ class MainViewModel @Inject constructor(private val api: Api) : ViewModel() {
                             id = i.toString()
                         )
                     }
-                }
+                }}
                 getUsersFromDB()
 
             }.onFailure {
