@@ -29,20 +29,20 @@ class DetailsViewModel @Inject constructor(private val api: Api) : ViewModel() {
                 temp?.let {
                     for (i in it.indices) {
                         repoOperations.updateOrCreateRepo(
-                            repositoryName = it[i].name,
-                            programmingLanguage = it[i].language,
-                            starCount = it[i].stargazers_count,
+                            repoTitle = it[i].name,
+                            lang = it[i].language,
+                            starring = it[i].stargazers_count,
                             url = it[i].html_url,
                             username = name
                         )
                     }
                 }
-                getReposFromDB(name)
+
 
             }.onFailure {
                 getReposFromDB(name)
             }
-
+            getReposFromDB(name)
         }
     }
     fun getReposFromDB(username: String) {

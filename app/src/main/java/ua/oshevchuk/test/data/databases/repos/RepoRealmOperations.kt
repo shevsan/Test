@@ -11,28 +11,25 @@ import ua.oshevchuk.test.models.details.RepositoryModel
  * @author shevsan on 29.07.2022
  */
 open class RepoRealmOperations {
-    private val config = RealmConfiguration.Builder(schema = setOf(RepoRO::class)).build()
-    private val realm = Realm.open(config)
+    private val cfg = RealmConfiguration.Builder(schema = setOf(RepoRO::class)).build()
+    private val realm = Realm.open(cfg)
 
-    suspend fun updateOrCreateRepo(
-        repositoryName: String,
-        programmingLanguage: String?,
-        starCount: Int,
-        url: String,
-        username: String
-    ) {
+    suspend fun updateOrCreateRepo(repoTitle: String, lang: String?, starring: Int, url: String, username: String)
+    {
         realm.write {
             val user: RepoRO? = query<RepoRO>("url == $0", url).first().find()
-            if (user != null) {
-                user.name = repositoryName
-                user.language = programmingLanguage
-                user.stargazers_count = starCount
+            if (user != null)
+            {
+                user.name = repoTitle
+                user.language = lang
+                user.stargazers_count = starring
                 user.html_url = url
             } else {
-                copyToRealm(RepoRO().apply {
-                    this.name = repositoryName
-                    this.language = programmingLanguage
-                    this.stargazers_count = starCount
+                copyToRealm(RepoRO().apply
+                {
+                    this.name = repoTitle
+                    this.language = lang
+                    this.stargazers_count = starring
                     this.html_url = url
                     this.username = username
                 })
@@ -40,13 +37,12 @@ open class RepoRealmOperations {
         }
     }
 
-    fun getRepos(
-        username: String
-    ): ArrayList<RepositoryModel> {
+    fun getRepos(login: String): ArrayList<RepositoryModel>
+    {
         val repoArray = ArrayList<RepositoryModel>()
-        val tasks: RealmResults<RepoRO> = realm.query<RepoRO>("username == $0", username).find()
+        val tasks: RealmResults<RepoRO> = realm.query<RepoRO>("username == $0", login).find()
         val temp = ArrayList<RepositoryModel>()
-        tasks.forEach { repo->
+        tasks.forEach { repo ->
             temp.add(
                 RepositoryModel(
                     name = repo.name,
@@ -57,7 +53,7 @@ open class RepoRealmOperations {
                 )
             )
         }
-        temp.forEach{
+        temp.forEach {
             repoArray.add(it)
         }
 

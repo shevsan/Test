@@ -1,5 +1,7 @@
 package ua.oshevchuk.test.ui.detailsGitRepos
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,18 +14,19 @@ import ua.oshevchuk.test.adapters.details.DetailsRecyclerAdapter
 import ua.oshevchuk.test.core.BaseFragment
 import ua.oshevchuk.test.databinding.FragmentDetailsBinding
 import ua.oshevchuk.test.models.users.UserModel
+import ua.oshevchuk.test.utils.bundleKey
 
 /**
  * @author shevsan on 28.07.2022
  */
 @AndroidEntryPoint
 class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBinding::inflate) {
-    private lateinit var currentUser:UserModel
+    private lateinit var currentUser: UserModel
     private lateinit var viewModel: DetailsViewModel
-    private lateinit var adapter:DetailsRecyclerAdapter
+    private lateinit var adapter: DetailsRecyclerAdapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        currentUser = arguments?.getSerializable("key") as UserModel
+        currentUser = arguments?.getSerializable(bundleKey) as UserModel
         binding.userName.text = currentUser.login
         viewModel = ViewModelProvider(this)[DetailsViewModel::class.java]
         initViewModel()
@@ -32,20 +35,29 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
             requireActivity().onBackPressed()
         }
     }
-    private fun initViewModel(){
-        try{
+
+    private fun initViewModel()
+    {
+        try {
+
             viewModel.getReposFromApi(currentUser.login)
             viewModel.getReposFromDB(currentUser.login)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             return
         }
 
-        viewModel.getRepos().observe(viewLifecycleOwner){
+        viewModel.getRepos().observe(viewLifecycleOwner) {
             adapter.setData(it)
         }
     }
-    private fun initAdapter(){
-        adapter = DetailsRecyclerAdapter()
+
+    private fun initAdapter()
+    {
+        adapter = DetailsRecyclerAdapter{
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.html_url))
+            startActivity(intent)
+
+        }
         binding.repoRecycler.adapter = adapter
     }
 }

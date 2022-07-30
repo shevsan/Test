@@ -10,7 +10,8 @@ import ua.oshevchuk.test.models.users.UserModel
 /**
  * @author shevsan on 28.07.2022
  */
-interface Api {
+interface Api
+{
     @GET("./users")
     suspend fun getUsersList(): Response<List<UserModel>>
     @GET("/users/{username}/repos")

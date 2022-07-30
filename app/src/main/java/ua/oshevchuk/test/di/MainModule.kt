@@ -17,7 +17,8 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object MainModule {
+object MainModule
+{
     @Provides
     @Singleton
     fun retrofitProvide():Api

@@ -11,6 +11,7 @@ import ua.oshevchuk.test.adapters.main.MainRecyclerAdapter
 import ua.oshevchuk.test.core.BaseFragment
 import ua.oshevchuk.test.databinding.FragmentMainBinding
 import ua.oshevchuk.test.models.users.UserModel
+import ua.oshevchuk.test.utils.bundleKey
 
 /**
  * @author shevsan on 28.07.2022
@@ -38,7 +39,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
     private fun onItemClicked(user:UserModel) {
         val bundle= Bundle()
-        bundle.putSerializable("key",user)
+        bundle.putSerializable(bundleKey,user)
         requireActivity().findNavController(R.id.fragmentContainerView)
             .navigate(R.id.action_mainFragment_to_detailsFragment,bundle)
     }

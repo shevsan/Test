@@ -5,3 +5,4 @@ package ua.oshevchuk.test.utils
  */
 
 const val baseUrl = "https://api.github.com"
+const val bundleKey = "key"
