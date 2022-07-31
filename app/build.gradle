@@ -3,9 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'io.realm.kotlin'
+    id 'realm-android'
 }
-apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -66,9 +65,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
     //realm
-    implementation 'io.realm.kotlin:library-base:1.0.0'
+    implementation 'io.realm:realm-gradle-plugin:10.11.1'
     //default
-    implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

@@ -38,19 +38,8 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
     }
 
     private fun initViewModel() {
-
-        MainScope().launch {
-            kotlin.runCatching {
-                viewModel.getReposFromDB(currentUser.login)
-                viewModel.getReposFromApi(currentUser.login)
-
-
-
-            }
-        }
-
-
-
+        viewModel.getReposFromDB(currentUser.login)
+        viewModel.getReposFromApi(currentUser.login)
         viewModel.getRepos().observe(viewLifecycleOwner) {
             adapter.setData(it)
         }

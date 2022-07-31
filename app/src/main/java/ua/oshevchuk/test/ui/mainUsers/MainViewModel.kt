@@ -5,12 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.kotlin.Realm
-import io.realm.kotlin.RealmConfiguration
-import io.realm.kotlin.ext.query
-import io.realm.kotlin.query.RealmResults
+import io.realm.Realm
+import io.realm.RealmResults
+import io.realm.kotlin.where
 import kotlinx.coroutines.launch
-import ua.oshevchuk.test.data.databases.users.UsersRealmOperations
 import ua.oshevchuk.test.data.retrofit.Api
 import ua.oshevchuk.test.models.users.UserModel
 import ua.oshevchuk.test.models.users.UserRO
@@ -23,9 +21,7 @@ import kotlin.collections.ArrayList
  */
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val api: Api) : ViewModel() {
-    private val realmOperations = UsersRealmOperations()
-    private var realmUsers = ArrayList<UserModel>()
+class MainViewModel @Inject constructor(private val api: Api, private val realm:Realm) : ViewModel() {
     private val users = MutableLiveData<List<UserModel>>()
     init {
         getUsersFromDB()
@@ -43,11 +39,13 @@ class MainViewModel @Inject constructor(private val api: Api) : ViewModel() {
                 users.value =temp
                 temp?.let {
                     for (i in 0 until it.size) {
-                        realmOperations.createUser(
-                            login = it[i].login,
-                            image = it[i].avatar_url,
-                            id = i.toString()
-                        )
+                        val userRo = UserRO()
+                        userRo.userName = it[i].login
+                        userRo.id = i.toString()
+                        userRo.imageURL = it[i].avatar_url
+                        realm.executeTransaction { transactionRealm ->
+                            transactionRealm.insertOrUpdate(userRo)
+                        }
                     }
                 }
                 getUsersFromDB()
@@ -64,29 +62,34 @@ class MainViewModel @Inject constructor(private val api: Api) : ViewModel() {
         return users
     }
     fun getUsersFromDB(){
-        realmUsers =UsersRealmOperations().getUsers()
-        users.postValue(realmUsers)
-    }
-    fun getUsersWithChangesCounter(){
-        val cfg = RealmConfiguration.Builder(schema = setOf(UserRO::class)).build()
-        val realm = Realm.open(cfg)
-        val arrayList = arrayListOf<UserModel>()
-        val tasks: RealmResults<UserRO> = realm.query<UserRO>().find()
-        val temp = ArrayList<UserModel>()
-        tasks.forEach { user ->
-            temp.add(
+        val tasks : RealmResults<UserRO> = realm.where<UserRO>().findAll()
+        val array = ArrayList<UserModel>()
+        tasks.forEach{
+            array.add(
                 UserModel(
-                    login = user.userName,
-                    avatar_url = user.imageURL,
-                    id = user.id.toInt(),
-                    changesCounter = user.changesCounter
-                )
+                    login = it.userName,
+                    avatar_url = it.imageURL,
+                    id = it.id.toInt(),
+                    changesCounter = it.changesCounter
+            )
             )
         }
-        temp.forEach{
-            arrayList.add(it)
-        }
-        users.value = arrayList
 
+        users.postValue(array)
+    }
+    fun getUsersWithChangesCounter(changesCounter:Int, id:String){
+        val result = realm.where<UserRO>().equalTo("id",id).findFirst()
+        val userRO = UserRO()
+        result?.let {
+            userRO.userName = it.userName
+            userRO.changesCounter = changesCounter
+            userRO.imageURL = it.imageURL
+        }
+        result?.deleteFromRealm()
+        realm.executeTransaction {
+                transactionRealm ->
+            transactionRealm.insertOrUpdate(userRO)
+        }
+        getUserList()
     }
 }

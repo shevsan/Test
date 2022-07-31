@@ -38,10 +38,10 @@ class PushService: FirebaseMessagingService() {
             intent.putExtra("changesCount", changesCount)
             sendBroadcast(intent)
         }
-        showNotifi(message)
+        showNotify(message)
 
     }
-    private fun showNotifi(message: RemoteMessage) {
+    private fun showNotify(message: RemoteMessage) {
         val intent = Intent(this, MainActivity::class.java)
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

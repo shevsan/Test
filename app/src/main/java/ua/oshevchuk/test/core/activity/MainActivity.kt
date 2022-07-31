@@ -3,11 +3,9 @@ package ua.oshevchuk.test.core.activity
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.provider.ContactsContract.Intents.Insert.ACTION
 import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
-import ua.oshevchuk.test.R
 import ua.oshevchuk.test.databinding.ActivityMainBinding
 import ua.oshevchuk.test.notifications.NotificationBroadcast
 import ua.oshevchuk.test.ui.mainUsers.MainViewModel
