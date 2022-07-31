@@ -35,6 +35,8 @@ open class UsersRealmOperations {
     }
 
     fun getUsers(): ArrayList<UserModel> {
+        val cfg = RealmConfiguration.Builder(schema = setOf(UserRO::class)).build()
+        val realm = Realm.open(cfg)
         val users = arrayListOf<UserModel>()
         val tasks: RealmResults<UserRO> = realm.query<UserRO>().find()
         val temp = ArrayList<UserModel>()
@@ -53,9 +55,9 @@ open class UsersRealmOperations {
         }
         return users
     }
-    fun updateUser(id: String, counter: Int)
+    suspend fun updateUser(id: String, counter: Int)
     {
-        realm.writeBlocking {
+        realm.write {
             val user: UserRO? = query<UserRO>("id == $0", id).first().find()
             user?.apply {
                 this.changesCounter = counter
