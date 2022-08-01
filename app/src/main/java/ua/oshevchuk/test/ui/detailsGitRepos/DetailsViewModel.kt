@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.Realm
-import io.realm.RealmResults
 import io.realm.kotlin.where
 import kotlinx.coroutines.launch
 import ua.oshevchuk.test.data.retrofit.Api
+import ua.oshevchuk.test.models.details.Owner
 import ua.oshevchuk.test.models.details.RepoRO
 import ua.oshevchuk.test.models.details.RepositoryModel
 import javax.inject.Inject
@@ -27,14 +27,11 @@ class DetailsViewModel @Inject constructor(private val api: Api, private val rea
             kotlin.runCatching {
                 val result = api.getUsersRepos(name)
                 val temp = result.body()
-                repos.value = temp
                 temp?.let {
-                    realm.executeTransaction {
-                            transactionRealm ->
-
+                    realm.executeTransaction { transactionRealm ->
                         it.forEach {
                             val repoRo = RepoRO()
-                            repoRo.username = it.username
+                            repoRo.username = it.owner.login
                             repoRo.name = it.name
                             repoRo.language = it.language
                             repoRo.html_url = it.html_url
@@ -42,7 +39,6 @@ class DetailsViewModel @Inject constructor(private val api: Api, private val rea
                             transactionRealm.insertOrUpdate(repoRo)
                         }
                     }
-
                 }
                 getReposFromDB(name)
             }.onFailure {
@@ -65,7 +61,7 @@ class DetailsViewModel @Inject constructor(private val api: Api, private val rea
                     language = it.language,
                     stargazers_count = it.stargazers_count,
                     html_url = it.html_url,
-                    username = it.username
+                    owner = Owner(it.username)
                 )
             )
         }

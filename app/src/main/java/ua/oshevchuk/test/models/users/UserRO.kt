@@ -10,7 +10,7 @@ import io.realm.annotations.PrimaryKey
 open class UserRO : RealmObject()
 {
     @PrimaryKey
-    var id: String = ""
+    var id: Int = 0
     var userName: String = ""
     var changesCounter: Int = 0
     var imageURL: String = ""

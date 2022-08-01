@@ -12,6 +12,6 @@ class NotificationBroadcast(private val viewModel: MainViewModel) : BroadcastRec
     override fun onReceive(context: Context?, intent: Intent?) {
         val id = intent!!.getStringExtra("userId")!!
         val changesCounter = intent.getIntExtra("changesCount", 0)
-        viewModel.getUsersWithChangesCounter(changesCounter,id)
+        viewModel.getUsersWithChangesCounter(changesCounter, id.toInt())
     }
 }

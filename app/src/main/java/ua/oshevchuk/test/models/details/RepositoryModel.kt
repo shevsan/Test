@@ -8,5 +8,9 @@ data class RepositoryModel(
     val language: String?,
     val name: String,
     val stargazers_count: Int,
-    val username: String
+    val owner: Owner
+)
+
+data class Owner(
+    val login: String
 )
